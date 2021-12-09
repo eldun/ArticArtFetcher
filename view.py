@@ -20,25 +20,22 @@ window.columnconfigure(index=0, weight=1)
 window.rowconfigure(index=0, weight=1)
 
 
-# Set up Frames
-file_management_frame = ttk.Frame(master=mainframe, borderwidth=5, relief=tk.RIDGE)
-file_management_frame.grid(column=0, row=0, sticky=(tk.NSEW))
+# Set up Labelframes
+file_management_frame = ttk.Labelframe(master=mainframe, text="File Management", borderwidth=5, relief=tk.RIDGE)
+file_management_frame.grid(column=0, row=0, sticky=(tk.NSEW), padx=10, pady=10)
 
-artwork_criteria_frame = ttk.Frame(master=mainframe, borderwidth=5, relief=tk.RIDGE)
-artwork_criteria_frame.grid(column=1, row=0, sticky=(tk.NSEW))
+artwork_criteria_frame = ttk.Labelframe(master=mainframe, text="Artwork Criteria")
+artwork_criteria_frame.grid(column=1, row=0, sticky=(tk.NSEW), padx=10, pady=10)
 
-log_frame = ttk.Frame(master=mainframe, borderwidth=5, relief=tk.RIDGE)
-log_frame.grid(column=0, row=1, sticky=(tk.NSEW))
+log_frame = ttk.Labelframe(master=mainframe, text="Log", borderwidth=5, relief=tk.RIDGE)
+log_frame.grid(column=0, columnspan=2, row=1, sticky=(tk.NSEW), padx=10, pady=10)
 
 button_frame = ttk.Frame(master=mainframe)
-button_frame.grid(column=1, row=1)
+button_frame.grid(column=1, row=2, padx=10, pady=5, sticky=tk.SE)
 
 
 
-# Populate frames with labels
-ttk.Label(master=file_management_frame, text="File Management").grid()
-ttk.Label(master=artwork_criteria_frame, text="Artwork Criteria").grid()
-ttk.Label(master=log_frame, text="Log").grid()
+
 ttk.Button(master=button_frame, text="Fetch Art").grid()
 
 
