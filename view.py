@@ -22,6 +22,8 @@ window.rowconfigure(index=0, weight=1)
 
 # Set up Labelframes
 file_management_frame = ttk.Labelframe(master=mainframe, text="File Management", borderwidth=5, relief=tk.RIDGE)
+file_management_frame.columnconfigure(0, weight=1)
+file_management_frame.columnconfigure(1, weight=1)
 file_management_frame.grid(column=0, row=0, sticky=(tk.NSEW), padx=10, pady=10)
 
 artwork_criteria_frame = ttk.Labelframe(master=mainframe, text="Artwork Criteria")
@@ -32,6 +34,15 @@ log_frame.grid(column=0, columnspan=2, row=1, sticky=(tk.NSEW), padx=10, pady=10
 
 button_frame = ttk.Frame(master=mainframe)
 button_frame.grid(column=1, row=2, padx=10, pady=5, sticky=tk.SE)
+
+
+# Populate file management section
+label_column = 0
+entry_column = 1
+
+ttk.Label(master=file_management_frame, text="Artwork Directory").grid(column=0, row=0, padx=5, pady=5)
+
+
 
 
 
