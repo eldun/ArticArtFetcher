@@ -2,6 +2,7 @@ import tkinter as tk    # Standard binding to tk
 import tkinter.ttk as ttk    # Binding to ttk submodule for new/prettier themed widgets
 from tkinter.constants import NSEW, NE, NW, SE, SW, N, S, E, W   # Standard binding to tk
 import tkinter.filedialog as filedialog
+import tkinter.colorchooser as colorchooser
 
 
 class FileManagementFrame(ttk.Labelframe):
@@ -40,25 +41,55 @@ class FileManagementFrame(ttk.Labelframe):
         # Description file option
         ttk.Checkbutton(self, text="Create artwork description file on desktop").grid(column=0, row=5, sticky=W, padx=5, pady=5)
 
-
-
-
-
-
-
-        # Configure resizing for file management columns
-        self.columnconfigure(index=0, weight=0)
-        self.columnconfigure(index=1, weight=0)
-
-        for row in range(self.grid_size()[1]):
-            self.rowconfigure(row, weight=1, minsize=30)
+        configure_frame_row_spacing(self)
 
 
         
 class ArtworkCriteriaFrame(ttk.Labelframe):
 
+    def on_choose_color(self):
+            colorchooser.askcolor()
+
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
+
+        # Date range
+        current_row = 0
+        ttk.Label(self, text="Date Range (Inclusive)").grid(column=0, row=current_row)
+        ttk.Entry(self).grid(column=1, row=current_row)
+        ttk.Label(self, text="-").grid(column=2, row=current_row)
+        ttk.Entry(self).grid(column=3, row=current_row)
+
+        # Artist
+        current_row += 1
+        ttk.Label(self, text="Artist").grid(column=0, row=current_row)
+        ttk.Combobox(self).grid(column=1, row=current_row)
+
+        # Art type(e.g. painting, sculpture, etc.)
+        current_row += 1
+        ttk.Label(self, text="Type").grid(column=0, row=current_row)
+        ttk.Combobox(self).grid(column=1, row=current_row)
+
+        # Color
+        current_row += 1
+        ttk.Label(self, text="Predominant Color").grid(column=0, row=current_row)
+        ttk.Entry(self).grid(column=1, row=current_row)
+        ttk.Button(self, command=self.on_choose_color).grid(column=2, row=current_row)
+
+        # Rarity
+        current_row += 1
+        ttk.Checkbutton(self, text="Fetch rarely viewed art").grid(column=0, row=current_row)
+
+        # Style (e.g. impressionist, abstract, etc.)
+        current_row += 1
+        ttk.Label(self, text="Style").grid(column=0, row=current_row)
+        ttk.Combobox(self).grid(column=1, row=current_row)
+
+        configure_frame_row_spacing(self)
+
+        
+
+
 
 class LogPaneFrame(ttk.Labelframe):
 
@@ -68,6 +99,18 @@ class LogPaneFrame(ttk.Labelframe):
 class FetchButtonFrame(ttk.Frame):   
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)    
+
+
+
+
+
+
+def configure_frame_row_spacing(frame):
+    for row in range(frame.grid_size()[1]):
+        frame.rowconfigure(row, weight=1, minsize=30)
+
+
+
 
 class MainApplication(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -80,6 +123,8 @@ class MainApplication(ttk.Frame):
         self.artwork_criteria_frame = ArtworkCriteriaFrame(self,  text="Artwork Criteria", borderwidth=5, relief=tk.RIDGE)
         self.log_panel_frame = LogPaneFrame(self,  text="Log", borderwidth=5, relief=tk.RIDGE)
         self.fetch_button_frame = FetchButtonFrame(self, borderwidth=5, relief=tk.RIDGE)
+
+        
 
         self.file_management_frame.grid(column=0, row=0, sticky=(NSEW), padx=10, pady=10)
         self.artwork_criteria_frame.grid(column=1, row=0, sticky=(NSEW), padx=10, pady=10)
@@ -107,3 +152,7 @@ if __name__ == "__main__":
 
 
     window.mainloop()
+
+
+
+
