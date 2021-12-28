@@ -52,8 +52,8 @@ class FileManagementFrame(ttk.Labelframe):
         tk.Checkbutton(self, anchor=CENTER).grid(column=2, row=5, sticky=EW)
 
         self.columnconfigure(index=0, weight=2, minsize=200)
-        self.columnconfigure(index=1, weight=1, minsize=100)
-        self.columnconfigure(index=2, weight=1, minsize=150)
+        self.columnconfigure(index=1, weight=1, minsize=50)
+        self.columnconfigure(index=2, weight=2, minsize=150)
         configure_frame_row_resize(self)
         add_widget_padding(self)
 
@@ -109,9 +109,9 @@ class ArtworkCriteriaFrame(ttk.Labelframe):
         # configure_frame_column_resize(self)
 
 
-        self.columnconfigure(index=0, weight=2, minsize= 200)
-        self.columnconfigure(index=1, weight=1, minsize=100)
-        self.columnconfigure(index=2, weight=1, minsize=150)
+        self.columnconfigure(index=0, weight=2, minsize=200)
+        self.columnconfigure(index=1, weight=1, minsize=50)
+        self.columnconfigure(index=2, weight=2, minsize=150)
 
         configure_frame_row_resize(self)
         add_widget_padding(self)
@@ -144,7 +144,13 @@ class LogPaneFrame(ttk.Labelframe):
 
 class FetchButtonFrame(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
-        super().__init__(parent, *args, **kwargs)    
+        super().__init__(parent, *args, **kwargs)
+        ttk.Button(self, text="Fetch", ).grid(column=0, row=0, sticky=NSEW)
+
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1)
+
+
 
 
 
@@ -173,8 +179,8 @@ class MainApplication(ttk.Frame):
 
         self.file_management_frame.grid(column=0, row=0, sticky=(NSEW), padx=10, pady=10)
         self.artwork_criteria_frame.grid(column=1, row=0, sticky=(NSEW), padx=10, pady=10)
-        self.log_panel_frame.grid(column=0, row=1, columnspan=2, sticky=NSEW)
-        self.fetch_button_frame.grid(column=1, row=2, padx=10, pady=5, sticky=NSEW)
+        self.log_panel_frame.grid(column=0, row=1, columnspan=2, padx=10, pady=10, sticky=NSEW)
+        self.fetch_button_frame.grid(column=1, row=2, padx=10, pady=10, sticky=NSEW)
 
 if __name__ == "__main__":
     # Create window
