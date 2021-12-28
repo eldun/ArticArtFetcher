@@ -5,6 +5,7 @@ from tkinter.constants import CENTER, EW, NSEW, NE, NW, SE, SW, N, S, E, W   # S
 import tkinter.filedialog as filedialog
 import tkinter.colorchooser as colorchooser
 import tkinter.scrolledtext as scrolledtext
+from typing import Sized
 
 class FileManagementFrame(ttk.Labelframe):
     def __init__(self, parent, *args, **kwargs):
@@ -123,12 +124,25 @@ class LogPaneFrame(ttk.Labelframe):
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        scrolled_text = scrolledtext.ScrolledText(master=self)
-        scrolled_text.grid(column=0, row=0)
+        self.scrolled_text = scrolledtext.ScrolledText(master=self)
+        self.scrolled_text.configure(state=tk.DISABLED, background='light gray')
+        self.scrolled_text.grid(column=0, row=0, sticky=NSEW)
+
+
+        self.columnconfigure(index=0, weight=1)
+        self.rowconfigure(index=0, weight=1)
+
+    def log_message(self, message):
+        self.scrolled_text.configure(state=tk.NORMAL)
+        self.scrolled_text.insert(tk.END, 'hey')
+        self.scrolled_text.configure(state=tk.DISABLED)
+
+
+        
 
 
 
-class FetchButtonFrame(ttk.Frame):   
+class FetchButtonFrame(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)    
 
@@ -159,7 +173,7 @@ class MainApplication(ttk.Frame):
 
         self.file_management_frame.grid(column=0, row=0, sticky=(NSEW), padx=10, pady=10)
         self.artwork_criteria_frame.grid(column=1, row=0, sticky=(NSEW), padx=10, pady=10)
-        self.log_panel_frame.grid(column=0, row=1, sticky=(NSEW), padx=10, pady=10)
+        self.log_panel_frame.grid(column=0, row=1, columnspan=2, sticky=NSEW)
         self.fetch_button_frame.grid(column=1, row=2, padx=10, pady=5, sticky=NSEW)
 
 if __name__ == "__main__":
@@ -175,11 +189,11 @@ if __name__ == "__main__":
     main_application.grid(column=0, row=0, sticky=(tk.NSEW))
 
     # Configure resize
-    main_application.columnconfigure(index=0, weight=1)
-    main_application.columnconfigure(index=1, weight=1, minsize=50)
-    main_application.rowconfigure(index=0, weight=1, minsize=50)
-    main_application.rowconfigure(index=1, weight=1, minsize=50)
-    main_application.rowconfigure(index=2, weight=1, minsize=50)
+    main_application.columnconfigure(index=0, weight=1, minsize= 300)
+    main_application.columnconfigure(index=1, weight=1, minsize=300)
+    main_application.rowconfigure(index=0, weight=1, minsize=300)
+    main_application.rowconfigure(index=1, weight=1, minsize=150)
+    main_application.rowconfigure(index=2, weight=1, minsize=100)
 
 
     window.mainloop()
