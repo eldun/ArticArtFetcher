@@ -1,4 +1,3 @@
-from os import initgroups
 import tkinter as tk    # Standard binding to tk
 import tkinter.ttk as ttk    # Binding to ttk submodule for new/prettier themed widgets
 from tkinter.constants import CENTER, EW, NSEW, NE, NW, SE, SW, N, S, E, W   # Standard binding to tk
@@ -51,10 +50,12 @@ class FileManagementFrame(ttk.Labelframe):
         ttk.Label(self, text="Create artwork description file on desktop:").grid(column=0, row=5, sticky=W, columnspan=2)
         tk.Checkbutton(self, anchor=CENTER).grid(column=2, row=5, sticky=EW)
 
-        self.columnconfigure(index=0, weight=2, minsize=200)
-        self.columnconfigure(index=1, weight=1, minsize=50)
-        self.columnconfigure(index=2, weight=2, minsize=150)
+        self.columnconfigure(index=0, weight=1)
+        self.columnconfigure(index=1, weight=0)
+        self.columnconfigure(index=2, weight=1)
+
         configure_frame_row_resize(self)
+        
         add_widget_padding(self)
 
 
@@ -106,14 +107,15 @@ class ArtworkCriteriaFrame(ttk.Labelframe):
         ttk.Label(self, text="Style").grid(column=0, row=current_row, sticky=W)
         ttk.Combobox(self, width=12).grid(column=2, row=current_row)
 
-        # configure_frame_column_resize(self)
 
 
-        self.columnconfigure(index=0, weight=2, minsize=200)
-        self.columnconfigure(index=1, weight=1, minsize=50)
-        self.columnconfigure(index=2, weight=2, minsize=150)
+        self.columnconfigure(index=0, weight=1)
+        self.columnconfigure(index=1, weight=0)
+        self.columnconfigure(index=2, weight=1)
+
 
         configure_frame_row_resize(self)
+
         add_widget_padding(self)
 
         
@@ -130,7 +132,8 @@ class LogPaneFrame(ttk.Labelframe):
 
 
         self.columnconfigure(index=0, weight=1)
-        self.rowconfigure(index=0, weight=1)
+        self.rowconfigure(index=0, weight=1, minsize=10)
+        configure_frame_row_resize(self)
 
     def log_message(self, message):
         self.scrolled_text.configure(state=tk.NORMAL)
@@ -145,7 +148,7 @@ class LogPaneFrame(ttk.Labelframe):
 class FetchButtonFrame(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        ttk.Button(self, text="Fetch", ).grid(column=0, row=0, sticky=NSEW)
+        tk.Button(self, text="Fetch", bg='light green').grid(column=0, row=0, sticky=NSEW)
 
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
@@ -156,7 +159,7 @@ class FetchButtonFrame(ttk.Frame):
 
 def configure_frame_row_resize(frame):
     for row in range(frame.grid_size()[1]):
-        frame.rowconfigure(row, weight=1, minsize=30)
+        frame.rowconfigure(row, weight=1)
 
 def add_widget_padding(frame):
     for widget in frame.winfo_children():
@@ -173,14 +176,14 @@ class MainApplication(ttk.Frame):
 
         self.file_management_frame = FileManagementFrame(self, text="File Management", borderwidth=5, relief=tk.RIDGE)
         self.artwork_criteria_frame = ArtworkCriteriaFrame(self, text="Artwork Criteria", borderwidth=5, relief=tk.RIDGE)
-        self.log_panel_frame = LogPaneFrame(self, text="Log", borderwidth=5, relief=tk.RIDGE)
+        self.log_panel_frame = LogPaneFrame(self, text="Log", borderwidth=5)
         self.fetch_button_frame = FetchButtonFrame(self, borderwidth=5, relief=tk.RIDGE)
 
 
-        self.file_management_frame.grid(column=0, row=0, sticky=(NSEW), padx=10, pady=10)
+        self.file_management_frame.grid(column=0, row=0, sticky=(NSEW), padx=10, pady=10, ipady=2)
         self.artwork_criteria_frame.grid(column=1, row=0, sticky=(NSEW), padx=10, pady=10)
         self.log_panel_frame.grid(column=0, row=1, columnspan=2, padx=10, pady=10, sticky=NSEW)
-        self.fetch_button_frame.grid(column=1, row=2, padx=10, pady=10, sticky=NSEW)
+        self.fetch_button_frame.grid(column=0, row=2, columnspan=2, padx=10, pady=10, sticky=NSEW)
 
 if __name__ == "__main__":
     # Create window
@@ -188,18 +191,17 @@ if __name__ == "__main__":
     window.title("ArticArtFetcher")
     window.columnconfigure(index=0, weight=1)
     window.rowconfigure(index=0, weight=1)
-    window.minsize(200,200)
+    window.minsize(800,400)
 
     # Create frame for window
     main_application = MainApplication(parent=window)
     main_application.grid(column=0, row=0, sticky=(tk.NSEW))
 
     # Configure resize
-    main_application.columnconfigure(index=0, weight=1, minsize= 300)
-    main_application.columnconfigure(index=1, weight=1, minsize=300)
-    main_application.rowconfigure(index=0, weight=1, minsize=300)
-    main_application.rowconfigure(index=1, weight=1, minsize=150)
-    main_application.rowconfigure(index=2, weight=1, minsize=100)
+    main_application.columnconfigure(index=0, weight=1)
+    main_application.columnconfigure(index=1, weight=1)
+    # Log pane should be the only row that shrinks/resizes
+    main_application.rowconfigure(index=1, weight=1)
 
 
     window.mainloop()
