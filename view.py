@@ -1,149 +1,187 @@
-import tkinter as tk
+import tkinter as tk    # Standard binding to tk
+import tkinter.ttk as ttk    # Binding to ttk submodule for new/prettier themed widgets
+from tkinter.constants import CENTER, EW, NSEW, NE, NW, SE, SW, N, S, E, W   # Standard binding to tk
 import tkinter.filedialog as filedialog
-from tkinter.constants import NSEW, NE, NW, SE, SW, N, S, E, W   # Standard binding to tk
-import tkinter.ttk as ttk   # Binding to ttk submodule for new/prettier themed widgets
+import tkinter.colorchooser as colorchooser
+import tkinter.scrolledtext as scrolledtext
 
 
-def set_up_frames():
+print("in view")
+class FileManagementFrame(ttk.Labelframe):
+    def __init__(self, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
 
-    # Set up Labelframes
-    file_management_frame = ttk.Labelframe(master=mainframe, text="File Management", borderwidth=5, relief=tk.RIDGE)
-    file_management_frame.grid(column=0, row=0, sticky=(NSEW), padx=10, pady=10)
+        # Populate file management section
 
-    artwork_criteria_frame = ttk.Labelframe(master=mainframe, text="Artwork Criteria")
-    artwork_criteria_frame.grid(column=1, row=0, sticky=(NSEW), padx=10, pady=10)
+        # Directory selection
+        output_directory="Placeholder Directory"
+        ttk.Label(self, text=f"Artwork Directory: {output_directory}").grid(column=0, row=0, sticky=W, columnspan=2)
+        ttk.Button(self, text="Choose Directory", command=filedialog.askdirectory).grid(column=2, row=0)
 
-    log_frame = ttk.Labelframe(master=mainframe, text="Log", borderwidth=5, relief=tk.RIDGE)
-    log_frame.grid(column=0, columnspan=2, row=1, sticky=(NSEW), padx=10, pady=10)
+        # 'Max pic count' options
+        ttk.Label(self, text="Max Picture Count:").grid(column=0, row=1, sticky=W)
+        ttk.Entry(self, width=7).grid(column=2, row=1)
 
-    button_frame = ttk.Frame(master=mainframe)
-    button_frame.grid(column=1, row=2, padx=10, pady=5, sticky=tk.SE)
+        # Max folder size
+        ttk.Label(self, text="Max Folder Size:").grid(column=0, row=2, sticky=W)
+        max_size_frame = ttk.Frame(self)
+        ttk.Entry(max_size_frame, width=4).grid(column=0, row=0)
+        folder_size_units_combobox = ttk.Combobox(max_size_frame, width=2)
+        folder_size_units_combobox['values'] = ('MB', 'GB', 'TB')
+        folder_size_units_combobox.state(['readonly'])
+        folder_size_units_combobox.grid(column=1, row=0)
+        max_size_frame.grid(column=2, row=2)
 
-def set_up_file_management_section():
+        # Auto Delete option
+        ttk.Label(self, text="Auto-delete old files:").grid(column=0, row=3, sticky=W)
+        tk.Checkbutton(self, anchor=CENTER).grid(column=2, row=3, sticky=EW)
 
-    # Directory selection
-    output_directory="Placeholder Directory"
-    ttk.Label(master=file_management_frame, text=f"Artwork Directory: {output_directory}").grid(column=0, row=0, sticky=W, padx=5, pady=5)
-    ttk.Button(master=file_management_frame, text="Choose Directory", command=filedialog.askdirectory).grid(column=1, row=0, padx=5, pady=5, sticky=E)
+        # Update frequency option
+        ttk.Label(self, text="Download new files every:").grid(column=0, row=4, sticky=W)
 
-    # 'Max size' options
-    ttk.Label(master=file_management_frame, text="Max Picture Count").grid(column=0, row=1, sticky=W, padx=5, pady=5)
-    ttk.Entry(master=file_management_frame).grid(column=1, row=1, padx=5, pady=5, sticky=E)
+        update_frequency_frame = ttk.Frame(self)
+        ttk.Entry(update_frequency_frame, width=3).grid(column=0, row=0)
+        art_check_frequency_combobox = ttk.Combobox(update_frequency_frame, width=5)
+        art_check_frequency_combobox['values'] = ('Hours', 'Days', 'Weeks', 'Months')
+        art_check_frequency_combobox.state(['readonly'])
+        art_check_frequency_combobox.grid(column=1, row=0)
+        update_frequency_frame.grid(column=2,row=4)
 
-    ttk.Label(master=file_management_frame, text="Max Folder Size").grid(column=0, row=2, sticky=W, padx=5, pady=5)
-    ttk.Entry(master=file_management_frame).grid(column=1, row=2, padx=5, pady=5, sticky=tk.W)
-    folder_size_units_combobox = ttk.Combobox(master=file_management_frame)
-    folder_size_units_combobox['values'] = ('MB', 'GB', 'TB')
-    folder_size_units_combobox.state(['readonly'])
-    folder_size_units_combobox.grid(column=2, row=2, padx=5, pady=5, sticky=W)
+        # Description file option
+        ttk.Label(self, text="Create artwork description file on desktop:").grid(column=0, row=5, sticky=W, columnspan=2)
+        tk.Checkbutton(self, anchor=CENTER).grid(column=2, row=5, sticky=EW)
 
-    # Auto Delete option
-    ttk.Checkbutton(master=file_management_frame, text="Auto-delete old files").grid(column=0, row=3, padx=5, pady=5, sticky=W)
+        self.columnconfigure(index=0, weight=1)
+        self.columnconfigure(index=1, weight=0)
+        self.columnconfigure(index=2, weight=1)
 
-    # Update frequency option
-    ttk.Label(master=file_management_frame, text="Download new files every: ").grid(column=0, row=4, sticky=W, padx=5, pady=5)
-    ttk.Entry(master=file_management_frame).grid(column=1, row=4, padx=5, pady=5, sticky=tk.W)
-    art_check_frequency_combobox = ttk.Combobox(master=file_management_frame)
-    art_check_frequency_combobox['values'] = ('Hours', 'Days', 'Weeks', 'Months')
-    art_check_frequency_combobox.state(['readonly'])
-    art_check_frequency_combobox.grid(column=2, row=4, padx=5, pady=5, sticky=W)
-
-    # Description file option
-    ttk.Checkbutton(master=file_management_frame, text="Create artwork description file on desktop").grid(column=0, row=5, sticky=W, padx=5, pady=5)
-
-
-    # Configure resizing for file management columns
-    file_management_frame.columnconfigure(index=0, weight=0)
-    file_management_frame.columnconfigure(index=1, weight=0)
-
-    for row in range(file_management_frame.grid_size()[1]):
-        file_management_frame.rowconfigure(row, weight=1, minsize=30)
-
-def set_up_criteria_section():
+        configure_frame_row_resize(self)
+        
+        add_widget_padding(self)
 
 
-    # has not been viewed much
-    # date start
-    # date end
+        
+class ArtworkCriteriaFrame(ttk.Labelframe):
 
-    # Directory selection
-    ttk.Label(master=file_management_frame, text=f"Artwork Directory: {output_directory}").grid(column=0, row=0, sticky=W, padx=5, pady=5)
-    ttk.Button(master=file_management_frame, text="Choose Directory", command=filedialog.askdirectory).grid(column=1, row=0, padx=5, pady=5, sticky=E)
+    def on_choose_color(self):
+            colorchooser.askcolor()
 
-    # 'Max size' options
-    ttk.Label(master=file_management_frame, text="Max Picture Count").grid(column=0, row=1, sticky=W, padx=5, pady=5)
-    ttk.Entry(master=file_management_frame).grid(column=1, row=1, padx=5, pady=5, sticky=E)
+    def __init__(self, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
 
-    ttk.Label(master=file_management_frame, text="Max Folder Size").grid(column=0, row=2, sticky=W, padx=5, pady=5)
-    ttk.Entry(master=file_management_frame).grid(column=1, row=2, padx=5, pady=5, sticky=tk.W)
-    folder_size_units_combobox = ttk.Combobox(master=file_management_frame)
-    folder_size_units_combobox['values'] = ('MB', 'GB', 'TB')
-    folder_size_units_combobox.state(['readonly'])
-    folder_size_units_combobox.grid(column=2, row=2, padx=5, pady=5, sticky=W)
+        # Date range        
+        current_row = 0
+        ttk.Label(self, text="Date Range (Inclusive)").grid(column=0, row=current_row, sticky=W)
+        date_range = ttk.Frame(master=self)
+        ttk.Entry(date_range, width=5).grid(column=0, row=current_row)
+        ttk.Combobox(date_range, width=2).grid(column=1, row=current_row)
+        ttk.Label(date_range, text="-").grid(column=2, row=current_row)
+        ttk.Entry(date_range, width=5).grid(column=3, row=current_row)
+        ttk.Combobox(date_range, width=2).grid(column=4, row=current_row)
+        date_range.grid(column=2, row=current_row)
 
-    # Auto Delete option
-    ttk.Checkbutton(master=file_management_frame, text="Auto-delete old files").grid(column=0, row=3, padx=5, pady=5, sticky=W)
+        # Artist
+        current_row += 1
+        ttk.Label(self, text="Artist").grid(column=0, row=current_row, sticky=W)
+        ttk.Combobox(self, width=12).grid(column=2, row=current_row)
 
-    # Update frequency option
-    ttk.Label(master=file_management_frame, text="Download new files every: ").grid(column=0, row=4, sticky=W, padx=5, pady=5)
-    ttk.Entry(master=file_management_frame).grid(column=1, row=4, padx=5, pady=5, sticky=tk.W)
-    art_check_frequency_combobox = ttk.Combobox(master=file_management_frame)
-    art_check_frequency_combobox['values'] = ('Hours', 'Days', 'Weeks', 'Months')
-    art_check_frequency_combobox.state(['readonly'])
-    art_check_frequency_combobox.grid(column=2, row=4, padx=5, pady=5, sticky=W)
+        # Art type(e.g. painting, sculpture, etc.)
+        current_row += 1
+        ttk.Label(self, text="Type").grid(column=0, row=current_row, sticky=W)
+        ttk.Combobox(self, width=12).grid(column=2, row=current_row)
 
-    # Description file option
-    ttk.Checkbutton(master=file_management_frame, text="Create artwork description file on desktop").grid(column=0, row=5, sticky=W, padx=5, pady=5)
+        # Color
+        current_row += 1        
+        ttk.Label(self, text="Predominant Color").grid(column=0, row=current_row, sticky=W)
+        color_frame = ttk.Frame(self)
+        ttk.Button(color_frame, command=self.on_choose_color).grid(column=0, row=0, sticky=EW)
+        ttk.Entry(color_frame, width=7).grid(column=1, row=0, sticky=E)
+        color_frame.grid(column=2, row=current_row)
 
+        # Rarity
+        current_row += 1
+        ttk.Label(self, text="Fetch rarely viewed art").grid(column=0, row=current_row, sticky=W)
+        tk.Checkbutton(self).grid(column=2, row=current_row, sticky=EW)
 
-    # Configure resizing for file management columns
-    file_management_frame.columnconfigure(index=0, weight=0)
-    file_management_frame.columnconfigure(index=1, weight=0)
-
-    for row in range(file_management_frame.grid_size()[1]):
-        file_management_frame.rowconfigure(row, weight=1, minsize=30)
-
-
-
-# Create window 
-window = tk.Tk()
-window.title("ArticArtFetcher")
-
-# Create Main Content Frame
-mainframe = ttk.Frame(master=window)
-mainframe.grid(column=0, row=0, sticky=(tk.NSEW))
-
-# Handle resize proportions
-mainframe.columnconfigure(index=0, weight=0)
-mainframe.columnconfigure(index=1, weight=1)
-mainframe.rowconfigure(index=0, weight=3)
-mainframe.rowconfigure(index=1, weight=1)
-
-window.columnconfigure(index=0, weight=1)
-window.rowconfigure(index=0, weight=1)
-
-set_up_frames()
-set_up_file_management_section()
+        # Style (e.g. impressionist, abstract, etc.)
+        current_row += 1
+        ttk.Label(self, text="Style").grid(column=0, row=current_row, sticky=W)
+        ttk.Combobox(self, width=12).grid(column=2, row=current_row)
 
 
 
+        self.columnconfigure(index=0, weight=1)
+        self.columnconfigure(index=1, weight=0)
+        self.columnconfigure(index=2, weight=1)
+
+
+        configure_frame_row_resize(self)
+
+        add_widget_padding(self)
+
+        
+
+
+
+class LogPaneFrame(ttk.Labelframe):
+
+    def __init__(self, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.scrolled_text = scrolledtext.ScrolledText(master=self)
+        self.scrolled_text.configure(state=tk.DISABLED, background='light gray')
+        self.scrolled_text.grid(column=0, row=0, sticky=NSEW)
+
+
+        self.columnconfigure(index=0, weight=1)
+        self.rowconfigure(index=0, weight=1, minsize=10)
+        configure_frame_row_resize(self)
+
+    def log_message(self, message):
+        self.scrolled_text.configure(state=tk.NORMAL)
+        self.scrolled_text.insert(tk.END, 'hey')
+        self.scrolled_text.configure(state=tk.DISABLED)
+
+
+        
+
+
+
+class FetchButtonFrame(ttk.Frame):
+    def __init__(self, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        tk.Button(self, text="Fetch", bg='light green').grid(column=0, row=0, sticky=NSEW)
+
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1)
 
 
 
 
 
+def configure_frame_row_resize(frame):
+    for row in range(frame.grid_size()[1]):
+        frame.rowconfigure(row, weight=1)
+
+def add_widget_padding(frame):
+    for widget in frame.winfo_children():
+        widget.grid_configure(padx=5, pady=5)
+        add_widget_padding(widget)
 
 
+class MainApplication(ttk.Frame):
+    def __init__(self, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+       
+        self.parent = parent
+        
+
+        self.file_management_frame = FileManagementFrame(self, text="File Management", borderwidth=5, relief=tk.RIDGE)
+        self.artwork_criteria_frame = ArtworkCriteriaFrame(self, text="Artwork Criteria", borderwidth=5, relief=tk.RIDGE)
+        self.log_panel_frame = LogPaneFrame(self, text="Log", borderwidth=5)
+        self.fetch_button_frame = FetchButtonFrame(self, borderwidth=5, relief=tk.RIDGE)
 
 
-
-
-# Artwork criteria section
-
-
-
-ttk.Button(master=button_frame, text="Fetch Art").grid()
-
-
-
-window.mainloop()
+        self.file_management_frame.grid(column=0, row=0, sticky=(NSEW), padx=10, pady=10, ipady=2)
+        self.artwork_criteria_frame.grid(column=1, row=0, sticky=(NSEW), padx=10, pady=10)
+        self.log_panel_frame.grid(column=0, row=1, columnspan=2, padx=10, pady=10, sticky=NSEW)
+        self.fetch_button_frame.grid(column=0, row=2, columnspan=2, padx=10, pady=10, sticky=NSEW)
