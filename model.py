@@ -1,5 +1,7 @@
-class FetcherModel():
-    pass
+class Model():
+    def __init__(self):
+        pass
+
 
 class FileManagementModel():
     def __init__(self):

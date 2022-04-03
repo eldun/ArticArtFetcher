@@ -1,5 +1,5 @@
 import tkinter as tk
-import view
+import model, view, controller
 
 if __name__ == "__main__":
     # Create window
@@ -19,6 +19,10 @@ if __name__ == "__main__":
     # Log pane should be the only row that shrinks/resizes
     main_application.rowconfigure(index=1, weight=1)
 
+    view = main_application
+    controller = controller.Controller()
+
+    view.set_controller(controller)
 
     window.mainloop()
 

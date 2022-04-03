@@ -6,7 +6,6 @@ import tkinter.colorchooser as colorchooser
 import tkinter.scrolledtext as scrolledtext
 
 
-print("in view")
 class FileManagementFrame(ttk.Labelframe):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -20,7 +19,7 @@ class FileManagementFrame(ttk.Labelframe):
 
         # 'Max pic count' options
         ttk.Label(self, text="Max Picture Count:").grid(column=0, row=1, sticky=W)
-        ttk.Entry(self, width=7).grid(column=2, row=1)
+        ttk.Entry(self, width=7).bind.grid(column=2, row=1)
 
         # Max folder size
         ttk.Label(self, text="Max Folder Size:").grid(column=0, row=2, sticky=W)
@@ -168,12 +167,14 @@ def add_widget_padding(frame):
         add_widget_padding(widget)
 
 
+
+
 class MainApplication(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
        
-        self.parent = parent
-        
+        self.parent = parent        
+        self.controller = None
 
         self.file_management_frame = FileManagementFrame(self, text="File Management", borderwidth=5, relief=tk.RIDGE)
         self.artwork_criteria_frame = ArtworkCriteriaFrame(self, text="Artwork Criteria", borderwidth=5, relief=tk.RIDGE)
@@ -185,3 +186,8 @@ class MainApplication(ttk.Frame):
         self.artwork_criteria_frame.grid(column=1, row=0, sticky=(NSEW), padx=10, pady=10)
         self.log_panel_frame.grid(column=0, row=1, columnspan=2, padx=10, pady=10, sticky=NSEW)
         self.fetch_button_frame.grid(column=0, row=2, columnspan=2, padx=10, pady=10, sticky=NSEW)
+
+
+
+    def set_controller(self, controller):
+        self.controller = controller
