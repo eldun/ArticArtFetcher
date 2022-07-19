@@ -19,10 +19,12 @@ if __name__ == "__main__":
     # Log pane should be the only row that shrinks/resizes
     main_application.rowconfigure(index=1, weight=1)
 
+    model = model.Model()
     view = main_application
-    controller = controller.Controller()
+    controller = controller.Controller(model, view)
 
     view.set_controller(controller)
+    view.configure_bindings()
 
     window.mainloop()
 

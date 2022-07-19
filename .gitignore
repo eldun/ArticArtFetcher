@@ -1,3 +1,6 @@
 artic-api-data.tar.bz2
 artic-api-data
 artic-api-data
+__pycache__/controller.cpython-39.pyc
+__pycache__/model.cpython-39.pyc
+__pycache__/view.cpython-39.pyc
